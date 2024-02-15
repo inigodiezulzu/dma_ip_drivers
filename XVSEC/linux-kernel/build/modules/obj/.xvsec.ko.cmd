@@ -1,0 +1,1 @@
+cmd_/home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/xvsec.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000 -z noexecstack   --build-id  -T ./scripts/module-common.lds -o /home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/xvsec.ko /home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/xvsec.o /home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/xvsec.mod.o;  true

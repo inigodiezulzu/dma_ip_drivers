@@ -966,11 +966,11 @@ engine_service_final_transfer(struct xdma_engine *engine,
 				}
 			}
 
-			transfer->desc_cmpl += *pdesc_completed;
 			if (!(transfer->flags & XFER_FLAG_ST_C2H_EOP_RCVED)) {
 				return NULL;
 			}
-
+			transfer->desc_cmpl = *pdesc_completed;
+			
 			/* mark transfer as successfully completed */
 			engine_service_shutdown(engine);
 
@@ -1002,6 +1002,7 @@ engine_service_final_transfer(struct xdma_engine *engine,
 			WARN_ON(*pdesc_completed > transfer->desc_num);
 		}
 		/* mark transfer as successfully completed */
+		engine_service_shutdown(engine);
 		transfer->state = TRANSFER_STATE_COMPLETED;
 		transfer->desc_cmpl = transfer->desc_num;
 		/* add dequeued number of descriptors during this run */
@@ -2327,12 +2328,12 @@ static void xdma_desc_link(struct xdma_desc *first, struct xdma_desc *second,
 /* xdma_desc_adjacent -- Set how many descriptors are adjacent to this one */
 static void xdma_desc_adjacent(struct xdma_desc *desc, u32 next_adjacent)
 {
-	/* remember reserved and control bits */
-	u32 control = le32_to_cpu(desc->control) & 0x0000f0ffUL;
-	/* merge adjacent and control field */
-	control |= 0xAD4B0000UL | (next_adjacent << 8);
-	/* write control and next_adjacent */
-	desc->control = cpu_to_le32(control);
+	//~ /* remember reserved and control bits */
+	//~ u32 control = le32_to_cpu(desc->control) & 0x0000f0ffUL;
+	//~ /* merge adjacent and control field */
+	//~ control |= 0xAD4B0000UL | (next_adjacent << 8);
+	//~ /* write control and next_adjacent */
+	desc->control = cpu_to_le32(le32_to_cpu(desc->control) | next_adjacent << 8);
 }
 
 /* xdma_desc_control -- Set complete control field of a descriptor. */
@@ -3615,9 +3616,9 @@ ssize_t xdma_xfer_submit(void *dev_hndl, int channel, bool write, u64 ep_addr,
 
 				for (i = 0; i < xfer->desc_cmpl; i++)
 					done += result[i].length;
-
-				/* finish the whole request */
-				if (engine->eop_flush)
+					
+				/* finish the whole request when EOP revcived */
+				if (engine->eop_flush && (xfer->flags & XFER_FLAG_ST_C2H_EOP_RCVED))
 					nents = 0;
 			} else
 				done += xfer->len;

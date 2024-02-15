@@ -35,10 +35,10 @@
 #include <linux/fs.h>
 #include <linux/uaccess.h>
 
-#include "xvsec_util.h"
-#include "xvsec_drv.h"
-#include "xvsec_drv_int.h"
-#include "xvsec_mcap.h"
+#include "../../xvsec_util.h"
+#include "../../xvsec_drv.h"
+#include "../../xvsec_drv_int.h"
+#include "../xvsec_mcap.h"
 #include "xvsec_mcap_us.h"
 
 
@@ -504,7 +504,7 @@ int xvsec_mcap_program_bitstream(struct vsec_context *mcap_ctx,
 		pr_err("Both Bit files are NULL\n");
 		return -(EINVAL);
 	}
-
+	
 	/* Acquire the Access */
 	ret = xvsec_mcap_req_access(mcap_ctx, &restore);
 	if (ret < 0)
@@ -520,7 +520,7 @@ int xvsec_mcap_program_bitstream(struct vsec_context *mcap_ctx,
 
 	ctrl_data = ctrl_data &
 		~(XVSEC_MCAP_CTRL_RESET | XVSEC_MCAP_CTRL_MOD_RESET |
-		XVSEC_MCAP_CTRL_RD_ENABLE | XVSEC_MCAP_CTRL_CFG_SWICTH);
+		XVSEC_MCAP_CTRL_RD_ENABLE );
 
 	pci_write_config_dword(pdev, ctrl_offset, ctrl_data);
 
@@ -916,10 +916,14 @@ static int xvsec_mcap_program(struct vsec_context *mcap_ctx, char *fname)
 
 	pr_info("After fopen\n");
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0)
 	ret = xvsec_util_get_file_size(fname, &file_size);
 	if (ret < 0)
 		goto CLEANUP;
-
+#else
+        file_size = xvsec_util_get_file_size(filep);
+#endif
+	
 	pr_info("After getsize\n");
 
 	if (file_size <= 0) {

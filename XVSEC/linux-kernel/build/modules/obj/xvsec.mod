@@ -1,0 +1,2 @@
+/home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/xvsec_drv.o /home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/xvsec_cdev.o /home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/xvsec_util.o /home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/./xvsec_mcap/xvsec_mcap.o /home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/./xvsec_mcap/us/xvsec_mcap_us.o /home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/./xvsec_mcap/versal/xvsec_mcap_versal.o
+

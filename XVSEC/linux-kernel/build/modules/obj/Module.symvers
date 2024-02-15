@@ -1,0 +1,4 @@
+0x0044fd6f	xvsec_deinitialize	/home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/xvsec	EXPORT_SYMBOL_GPL	
+0xb9bbe8b5	xvsec_cdev_create	/home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/xvsec	EXPORT_SYMBOL_GPL	
+0xea8c2568	xvsec_initialize	/home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/xvsec	EXPORT_SYMBOL_GPL	
+0xf74ced61	xvsec_cdev_remove	/home/usuario/dma_ip_drivers/XVSEC/linux-kernel/drv/xvsec	EXPORT_SYMBOL_GPL	

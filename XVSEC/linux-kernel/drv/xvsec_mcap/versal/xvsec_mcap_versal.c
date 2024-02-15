@@ -36,11 +36,11 @@
 #include <linux/fs.h>
 #include <linux/uaccess.h>
 
-#include "xvsec_drv.h"
-#include "xvsec_drv_int.h"
-#include "xvsec_mcap.h"
+#include "../../xvsec_drv.h"
+#include "../../xvsec_drv_int.h"
+#include "../xvsec_mcap.h"
 #include "xvsec_mcap_versal.h"
-#include "xvsec_util.h"
+#include "../../xvsec_util.h"
 
 static int xvsec_mcapv2_wr_enable(struct vsec_context *mcap_ctx);
 static int xvsec_mcapv2_rd_enable(struct vsec_context *mcap_ctx);
@@ -390,9 +390,13 @@ int xvsec_mcapv2_file_download(
 	if (filep == NULL)
 		return -(ENOENT);
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0)
 	ret = xvsec_util_get_file_size(fname, &file_size);
 	if (ret < 0)
 		goto CLEANUP_EXIT;
+#else
+        file_size = xvsec_util_get_file_size(filep);
+#endif
 
 	if (file_size <= 0) {
 		file_info->v2.op_status = FILE_OP_ZERO_FSIZE;
@@ -739,9 +743,13 @@ int xvsec_mcapv2_file_upload(
 	xvsec_util_fsync(filep);
 
 	/** Compare the requested size with file size */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0)
 	ret = xvsec_util_get_file_size(fname, &file_size);
 	if (ret < 0)
 		goto CLEANUP;
+#else
+        file_size = xvsec_util_get_file_size(filep);
+#endif
 
 	if (file_size != file_info->v2.length) {
 		pr_err("%s: Could not read complete requested length\n",

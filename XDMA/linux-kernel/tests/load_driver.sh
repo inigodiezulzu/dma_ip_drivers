@@ -18,7 +18,7 @@ fi;
 
 interrupt_selection=$1
 echo "interrupt_selection $interrupt_selection."
-device_id=903f
+device_id=9011
 
 # Make sure only root can run our script
 if [[ $EUID -ne 0 ]]; then
